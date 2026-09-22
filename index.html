@@ -22,16 +22,16 @@
 
 <style>
   :root{
-    --wine:     #6d1423;   /* the ground */
-    --wine-hi:  #8a1d30;   /* lift, top of the gradient */
-    --wine-lo:  #56101c;   /* settle, bottom of the gradient */
-    --cream:    #f7efdf;   /* the paper panels */
-    --cream-hi: #fdf8ee;
-    --ink:      #f7efe2;   /* type on wine */
-    --ink-soft: #e4d3bd;
-    --gold:     #c9a24c;
-    --gold-soft:#e6cb92;
-    --sage:     #d2ab75;
+    --ground:   #4b1622;   /* deep wine / burgundy (the saree) */
+    --ground-2: #611e30;   /* raised panel */
+    --wine-hi:  #7a2a3d;   /* lighter wine for gradients */
+    --ink:      #f5efe1;   /* ivory (the jacket) */
+    --ink-soft: #e3d4c2;   /* muted ivory */
+    --sage:     #cbac7d;   /* muted gold-tan, used for small labels */
+    --gold:     #cbae6b;   /* antique gold accent */
+    --gold-soft:#ecd8a6;
+    --rose:     #e6a6a6;   /* soft blush, used very sparingly */
+    --line:     rgba(203,174,107,.35);
 
     --display: "Marcellus", Georgia, "Times New Roman", serif;
     --text:    "Lora", Georgia, "Times New Roman", serif;
@@ -45,7 +45,10 @@
     margin:0;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: var(--wine);
+    background-color: var(--ground);
+    background-image:
+      radial-gradient(120% 80% at 50% -10%, #6d2439 0%, rgba(109,36,57,0) 55%),
+      radial-gradient(90% 60% at 50% 108%, #5c1d2f 0%, rgba(75,22,34,0) 60%);
     color: var(--ink);
     font-family: var(--text);
     font-weight: 400;
@@ -56,81 +59,55 @@
     overflow-x: hidden;
   }
   img{ max-width:100%; display:block; }
-  h1,h2,h3{ font-weight:400; margin:0; }
-  p{ margin:0; }
-  a{ color: inherit; }
 
-  .sprite{ position:absolute; width:0; height:0; overflow:hidden; }
-
-  /* ---------------------------------------------------------------
-     Bands. The page alternates paper and wine; each band re-declares
-     its own foreground tokens so every component below is theme-blind.
-     ---------------------------------------------------------------- */
-  .band{ position:relative; overflow:hidden; }
-  .band--wine{
-    background-color: var(--wine);
-    background-image:
-      radial-gradient(120% 80% at 50% -10%, var(--wine-hi) 0%, rgba(138,29,48,0) 58%),
-      radial-gradient(90% 60% at 50% 110%, var(--wine-lo) 0%, rgba(86,16,28,0) 62%);
-    --fg:      var(--ink);
-    --fg-soft: var(--ink-soft);
-    --head:    var(--gold-soft);
-    --label:   var(--sage);
-    --accent:  var(--gold);
-    --hair:    rgba(201,162,76,.32);
-    --panel:   linear-gradient(180deg, rgba(201,162,76,.10), rgba(0,0,0,.14));
-  }
-  .band--cream{
-    background-color: var(--cream);
-    background-image: radial-gradient(120% 90% at 50% 0%, var(--cream-hi) 0%, rgba(253,248,238,0) 60%);
-    --fg:      #42302a;
-    --fg-soft: #6d574b;
-    --head:    #8c1c2c;
-    --label:   #a8743c;
-    --accent:  #b8903f;
-    --hair:    rgba(140,28,44,.20);
-    --panel:   linear-gradient(180deg, rgba(184,144,63,.09), rgba(140,28,44,.03));
-  }
-  .band > .wrap{ color: var(--fg); }
-
-  /* paper grain, only on the wine bands */
-  .band--wine::after{
-    content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  body::before{
+    content:"";
+    position: fixed; inset:0; pointer-events:none; z-index:0;
     opacity:.05; mix-blend-mode: screen;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
-  /* corner florals */
+  .wrap{ position: relative; z-index:1; width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 1.4rem; }
+
+  /* ---------- lotus corners ----------
+     Purely decorative, painted behind everything (.wrap sits at z-index 1)
+     and fixed to the viewport, so no box on the page changes size. */
+  .sprite{ position:absolute; width:0; height:0; overflow:hidden; }
+  .ornlayer{ position:fixed; inset:0; z-index:0; pointer-events:none; }
   .orn{
-    position:absolute; width:118px; height:118px; z-index:0;
-    color: var(--accent); opacity:.26; pointer-events:none;
+    position:absolute; width:116px; height:116px;
+    color: var(--gold); opacity:.2; pointer-events:none;
   }
-  .band--cream .orn{ opacity:.32; }
   .orn--tl{ top:0; left:0; }
   .orn--tr{ top:0; right:0; transform: scaleX(-1); }
   .orn--bl{ bottom:0; left:0; transform: scaleY(-1); }
   .orn--br{ bottom:0; right:0; transform: scale(-1,-1); }
+  #cover .orn{ opacity:.24; }
 
-  .wrap{ position: relative; z-index:1; width: 100%; max-width: var(--maxw); margin: 0 auto; padding-inline: 1.4rem; }
-
+  /* Marcellus sets the "engraved" voice: caps, letterspaced, never bold. */
   .display{
-    font-family: var(--display); font-weight: 400;
-    text-transform: uppercase; letter-spacing: .12em;
-    color: var(--head); line-height: 1.15;
+    font-family: var(--display);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--gold-soft);
+    line-height: 1.15;
   }
-  .amp{ font-family: var(--text); font-style: italic; text-transform:none; letter-spacing:0; color: var(--accent); }
+  .amp{ font-family: var(--text); font-style: italic; font-weight:400; text-transform:none; letter-spacing:0; color: var(--gold); }
+  h1,h2,h3{ font-weight:400; margin:0; }
+  a{ color: inherit; }
 
-  /* ornamental rule */
-  .rule{ display:block; width:190px; height:auto; aspect-ratio: 200 / 26; margin: 1.5rem auto; color: var(--accent); opacity:.85; }
-  .rule--sm{ width:130px; margin: 1rem auto; }
+  .invocation{ text-align:center; color: var(--gold-soft); font-size:1.05rem; letter-spacing:.04em; margin-bottom:1.5rem; }
 
-  /* ---------- envelope cover (unchanged — the opening you liked) ---------- */
+  .sprig{ display:block; margin: 2.6rem auto; width: 108px; height: auto; color: var(--gold); opacity:.9; }
+
+  /* ---------- envelope cover ---------- */
   #cover{
     position: fixed; inset:0; z-index: 50;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap: 1.6rem; padding: 2rem 1.4rem;
-    background-color: var(--wine);
-    background-image: radial-gradient(120% 90% at 50% 30%, var(--wine-hi) 0%, var(--wine) 60%);
+    background-color: var(--ground);
+    background-image: radial-gradient(120% 90% at 50% 30%, #6d2439 0%, var(--ground) 60%);
     cursor: pointer;
     transition: opacity .9s ease, visibility .9s ease;
   }
@@ -169,101 +146,117 @@
   #cover.open .seal{ opacity:0; }
   .tap{ color: var(--ink-soft); letter-spacing:.24em; font-size:.78rem; text-transform:uppercase; }
   .tap span{ display:inline-block; animation: bob 2.4s ease-in-out infinite; }
-  .cover-names{ font-size: clamp(1.5rem, 7.5vw, 2.2rem); text-align:center; color: var(--gold-soft); }
+  .cover-names{ font-size: clamp(1.5rem, 7.5vw, 2.2rem); text-align:center; }
   .cover-invoke{ color: var(--gold-soft); font-size:.98rem; letter-spacing:.04em; opacity:.9; }
-  .chev{ display:inline-block; width:.72em; height:auto; aspect-ratio: 16 / 10; vertical-align:baseline; margin-left:.5em; }
+
   @keyframes bob{ 0%,100%{ transform: translateY(0); opacity:.7 } 50%{ transform: translateY(4px); opacity:1 } }
 
   /* ---------- hero ---------- */
-  .hero{ min-height: 100svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding-block: 4.5rem 3.5rem; }
-  .invocation{ color: var(--head); font-size:1.02rem; letter-spacing:.04em; margin-bottom:1.4rem; }
-  .hero .blessing{ font-style: italic; color: var(--fg-soft); font-size: 1rem; max-width: 25rem; margin: 0 auto; }
-  .hero-names{ margin: 1.2rem 0 .2rem; }
+  .hero{ min-height: 100svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 5rem 0 3rem; }
+  .hero .blessing{ font-style: italic; color: var(--ink-soft); font-size: 1rem; max-width: 24rem; margin: 0 auto; }
+  .hero-names{ margin: 1.1rem 0 .4rem; }
   .hero-names .first{ display:block; font-size: clamp(2rem, 10.5vw, 3.1rem); }
   .hero-names .amp{ display:block; font-size: clamp(1.7rem, 8vw, 2.4rem); margin:.15rem 0; }
-  .hero .role{ letter-spacing:.34em; text-transform:uppercase; font-size:.8rem; color: var(--label); font-family: var(--display); margin-block:.35rem 1rem; }
-  .hero .when{ font-size: 1.25rem; margin-top: 1.2rem; color: var(--fg); }
-  .hero .when b{ font-weight:600; color: var(--head); }
-  .hero .where{ font-size: 1.15rem; color: var(--fg); margin-top:.1rem; }
+  .hero .role{ letter-spacing:.3em; text-transform:uppercase; font-size:.82rem; color: var(--sage); margin-top:1rem; }
+  .hero .when{ font-size: 1.2rem; margin-top: 1.4rem; color: var(--ink); }
+  .hero .when b{ font-weight:600; color: var(--gold-soft); }
+  .chev{ display:inline-block; width:.72em; height:auto; vertical-align:baseline; margin-left:.5em; }
 
-  section{ padding-block: 4rem; }
-  .band section + section{ padding-block-start: 0; }
-  .section-title{ text-align:center; font-family: var(--text); font-weight:600; color: var(--head); font-size: clamp(1.45rem, 6vw, 1.85rem); line-height:1.3; letter-spacing:.005em; }
+  section{ padding: 3.4rem 0; }
+  /* Italic Lora line above, engraved caps below — the hierarchy the script used to carry. */
+  .section-title{
+    text-align:center;
+    font-family: var(--display); font-weight:400;
+    text-transform: uppercase; letter-spacing:.2em;
+    font-size: clamp(.95rem, 4vw, 1.1rem);
+    color: var(--sage);
+  }
+  .section-title .lead{
+    display:block;
+    font-family: var(--text); font-style: italic; font-weight:400;
+    text-transform:none; letter-spacing:.01em;
+    font-size: clamp(1.7rem, 7.5vw, 2.2rem);
+    color: var(--gold-soft);
+    margin-bottom:.5rem;
+  }
 
   /* ---------- countdown ---------- */
   #countdown{ text-align:center; }
-  .cd-grid{ display:flex; justify-content:center; gap: .7rem; margin-top: 1.6rem; flex-wrap:wrap; }
+  .cd-grid{ display:flex; justify-content:center; gap: .6rem; margin-top: 1.8rem; flex-wrap:wrap; }
   .cd-cell{
-    min-width: 4.9rem; padding: .95rem .6rem;
-    border: 1px solid var(--hair); border-radius: 5px; background: var(--panel);
+    min-width: 4.6rem; padding: 1rem .6rem;
+    border: 1px solid var(--line); border-radius: 4px;
+    background: linear-gradient(180deg, rgba(203,174,107,.12), rgba(0,0,0,.12));
   }
-  .cd-num{ font-family: var(--display); font-size: 2.1rem; color: var(--head); line-height:1; font-variant-numeric: tabular-nums; }
-  .cd-lab{ display:block; margin-top:.4rem; font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color: var(--fg-soft); }
-  .cd-note{ margin-top:1.2rem; font-style:italic; color: var(--fg-soft); font-size:.95rem; }
-  .cd-live{ font-style:italic; font-size: clamp(1.3rem,6vw,1.7rem); color: var(--head); }
+  .cd-num{ font-family: var(--display); font-size: 2.1rem; color: var(--gold-soft); line-height:1; font-variant-numeric: tabular-nums; }
+  .cd-lab{ display:block; margin-top:.5rem; font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color: var(--ink-soft); }
+  .cd-note{ margin-top:1.3rem; font-style:italic; color: var(--ink-soft); font-size:.95rem; }
+  .cd-live{ font-family: var(--text); font-style:italic; font-size: clamp(1.4rem,6.5vw,1.9rem); color: var(--gold-soft); }
 
   /* ---------- families ---------- */
-  .pair{ display:grid; grid-template-columns: 1fr; gap: 1.6rem; align-items:start; margin-top: 1.6rem; }
+  #families .pair{ display:flex; flex-direction:column; gap: 2.6rem; align-items:center; margin-top: 2rem; }
   .party{ text-align:center; }
-  .party .name{ font-family: var(--display); text-transform:uppercase; letter-spacing:.09em; font-size: 1.16rem; color: var(--head); font-weight:400; }
-  .party .work{ font-size:.9rem; font-style:italic; color: var(--label); margin-top:.35rem; }
-  .party .sub{ font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color: var(--label); margin:.9rem 0 .3rem; font-family: var(--display); }
-  .party .parents{ font-size: 1.04rem; color: var(--fg); font-weight:500; }
-  .party .place{ color: var(--fg-soft); font-style: italic; font-size:.92rem; margin-top:.8rem; max-width: 18rem; margin-inline:auto; }
-  /* ornamental divider between the two families */
-  .vrule{ display:flex; align-items:center; justify-content:center; gap:.6rem; color: var(--accent); opacity:.6; }
-  .vrule i{ display:block; background: currentColor; }
-  .vrule .bar{ width:52px; height:1px; }
-  .vrule .dia{ width:7px; height:7px; transform: rotate(45deg); }
+  .party .name{ font-size: clamp(1.25rem, 5.5vw, 1.55rem); line-height:1.25; }
+  .party .work{ font-size:.92rem; font-style:italic; color: var(--sage); margin-top:.5rem; }
+  .party .sub{ font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color: var(--sage); margin:1rem 0 .4rem; }
+  .party .parents{ font-size: 1.08rem; color: var(--ink); line-height:1.6; }
+  .party .parents span{ display:block; }
+  .party .place{ color: var(--ink-soft); font-style: italic; font-size:.95rem; margin-top:1rem; max-width: 20rem; margin-inline:auto; }
+  .heart-rule{ color: var(--rose); font-size:1.2rem; opacity:.85; }
 
   /* ---------- details ---------- */
   #details{ text-align:center; }
-  .facts{ display:grid; grid-template-columns: 1fr; gap:0; margin-top:1.6rem; border:1px solid var(--hair); border-radius:6px; background: var(--panel); overflow:hidden; }
-  .fact{ padding: 1.15rem 1rem; }
-  .fact + .fact{ border-top: 1px solid var(--hair); }
-  .fact svg{ width:26px; height:26px; color: var(--accent); margin:0 auto .5rem; display:block; }
-  .fact .k{ font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color: var(--label); font-family: var(--display); }
-  .fact .v{ font-size: 1.06rem; color: var(--fg); margin-top:.2rem; }
-  .fact .v b{ font-weight:600; color: var(--head); }
+  .detail-card{
+    border:1px solid var(--line); border-radius:6px; padding: 1.8rem 1.3rem; margin-top: 1.6rem;
+    background: linear-gradient(180deg, rgba(203,174,107,.10), rgba(0,0,0,.14));
+  }
+  .detail-row{ padding: .9rem 0; border-bottom: 1px solid rgba(203,174,107,.16); }
+  .detail-row:last-child{ border-bottom:0; }
+  .detail-k{ font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; color: var(--sage); }
+  .detail-v{ font-size: 1.18rem; color: var(--ink); margin-top:.35rem; }
+  .detail-v b{ color: var(--gold-soft); font-weight:600; }
+  .ring{ color: var(--gold); }
+  .venue-name{ font-family: var(--display); text-transform:uppercase; letter-spacing:.1em; font-size: 1.1rem; color: var(--gold-soft); margin-top:.35rem; }
+  .venue-addr{ color: var(--ink-soft); font-style:italic; font-size:.95rem; }
 
-  .venue{ margin-top:1.6rem; display:flex; align-items:flex-start; justify-content:center; gap:.7rem; text-align:left; }
-  .venue svg{ width:24px; height:24px; color: var(--accent); flex:none; margin-top:.15rem; }
-  .venue-name{ font-family: var(--display); text-transform:uppercase; letter-spacing:.09em; font-size:1.02rem; color: var(--head); line-height:1.35; }
-  .venue-addr{ color: var(--fg-soft); font-style:italic; font-size:.93rem; }
+  .map{
+    margin-top: 1.4rem; border:1px solid var(--line); border-radius:6px;
+    overflow:hidden; line-height:0;
+  }
+  .map iframe{ display:block; width:100%; height:290px; border:0; filter: saturate(.9); }
 
-  .map{ margin-top:1.4rem; border:1px solid var(--hair); border-radius:6px; overflow:hidden; line-height:0; }
-  .map iframe{ display:block; width:100%; height:270px; border:0; filter: saturate(.9); }
-
-  .actions{ display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; margin-top: 1.5rem; }
+  .actions{ display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top: 1.8rem; }
   .btn{
     display:inline-flex; align-items:center; gap:.5rem;
-    padding: .78rem 1.2rem; border-radius: 999px; text-decoration:none;
-    font-family: var(--display); font-size:.74rem; letter-spacing:.16em; text-transform:uppercase;
-    border:1px solid var(--accent); color: var(--head);
-    background: transparent; transition: background .25s ease, color .25s ease, border-color .25s ease;
+    padding: .8rem 1.3rem; border-radius: 999px; text-decoration:none;
+    font-family: var(--display); font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+    border:1px solid var(--gold); color: var(--gold-soft);
+    background: transparent; transition: background .25s ease, color .25s ease;
   }
-  .btn svg{ width:16px; height:16px; }
-  .btn:hover,.btn:focus-visible{ background: var(--accent); color: var(--cream); border-color: var(--accent); }
-  .band--cream .btn:hover, .band--cream .btn:focus-visible{ color: var(--cream-hi); }
+  .btn:hover,.btn:focus-visible{ background: var(--gold); color: #3a0f1c; }
+  .btn.solid{ background: var(--gold); border-color: var(--gold); color:#3a0f1c; }
+  .btn.solid:hover,.btn.solid:focus-visible{ background: var(--gold-soft); border-color: var(--gold-soft); color:#3a0f1c; }
 
-  /* ---------- with love, from our families ---------- */
+  /* ---------- siblings ("with love, from") ---------- */
   #kin{ text-align:center; }
-  .kin-grid{ display:grid; grid-template-columns: 1fr; gap:1.4rem; margin-top:1.6rem; }
-  .kin-side{ font-family: var(--display); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color: var(--head); margin-bottom:.9rem; }
-  .kin-row + .kin-row{ margin-top:.9rem; }
-  .kin-name{ display:block; font-size:1.04rem; color: var(--fg); font-weight:600; line-height:1.4; }
-  .kin-role{ display:block; font-style:italic; font-size:.88rem; color: var(--fg-soft); }
-  .kin-note{ margin-top:1.6rem; font-style:italic; color: var(--fg-soft); font-size:.97rem; }
+  .kin-card{
+    border:1px solid var(--line); border-radius:6px; padding: 1.6rem 1.3rem .4rem; margin-top: 1.6rem;
+    background: linear-gradient(180deg, rgba(203,174,107,.08), rgba(0,0,0,.12));
+  }
+  .kin-group{ padding-bottom: 1.4rem; }
+  .kin-group + .kin-group{ border-top: 1px solid rgba(203,174,107,.16); padding-top: 1.4rem; }
+  .kin-side{ font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color: var(--sage); margin-bottom:.9rem; }
+  .kin-row + .kin-row{ margin-top: .9rem; }
+  .kin-name{ display:block; font-family: var(--display); text-transform:uppercase; letter-spacing:.08em; font-size:1rem; color: var(--gold-soft); line-height:1.35; }
+  .kin-role{ display:block; font-style:italic; font-size:.88rem; color: var(--ink-soft); margin-top:.15rem; }
+  .kin-note{ margin-top:1.3rem; font-style:italic; color: var(--ink-soft); font-size:.95rem; }
 
-  /* ---------- closing ---------- */
-  .closing{ text-align:center; padding-block: 4.5rem 1rem; }
-  .closing .verse{ font-style:italic; color: var(--fg-soft); font-size:1.05rem; max-width: 26rem; margin: 0 auto; }
-  .closing .join{ font-style:italic; color: var(--fg); font-size: clamp(1.15rem,5vw,1.35rem); margin-top:.2rem; }
-  .monogram{ font-family: var(--display); color: var(--head); font-size: clamp(2.6rem,13vw,3.6rem); letter-spacing:.06em; line-height:1; margin-top:2rem; }
-  .monogram .amp{ font-size:.72em; }
-  .stamp{ font-family: var(--display); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color: var(--label); margin-top:1rem; }
-  .lotus-end{ display:block; width:52px; height:auto; aspect-ratio: 56 / 36; margin: 2rem auto .5rem; color: var(--accent); opacity:.8; }
-  .wave{ display:block; width:100%; max-width:320px; height:auto; aspect-ratio: 320 / 20; margin: .5rem auto 0; color: var(--accent); opacity:.4; }
+  .closing{ text-align:center; padding: 4rem 0 1rem; }
+  .closing .verse{ font-style:italic; color: var(--ink-soft); max-width: 24rem; margin: 0 auto 1.6rem; }
+  .closing .join{ font-family: var(--text); font-style:italic; color: var(--gold-soft); font-size: clamp(1.5rem,6.5vw,2rem); line-height:1.3; }
+  footer{ text-align:center; padding: 2.4rem 0 3rem; color: var(--sage); }
+  footer .mono{ font-family: var(--display); text-transform:uppercase; letter-spacing:.24em; color: var(--gold); font-size:1.5rem; line-height:1; }
+  footer .small{ font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; margin-top:.8rem; opacity:.7; }
 
   a:focus-visible, [tabindex]:focus-visible, .btn:focus-visible{ outline: 2px solid var(--gold-soft); outline-offset: 3px; }
   .reveal{ opacity:0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
@@ -275,55 +268,80 @@
     .tap span{ animation:none; }
   }
 
-  /* ---------- tablet ---------- */
   @media (min-width: 40rem){
+    .orn{ width:148px; height:148px; }
     :root{ --maxw: 40rem; }
-    .pair{ grid-template-columns: 1fr auto 1fr; gap: 1.6rem; }
-    .vrule{ flex-direction:column; height:100%; padding-top:1.5rem; }
-    .vrule .bar{ width:1px; height:54px; }
-    .kin-grid{ grid-template-columns: 1fr 1px 1fr; gap:1.8rem; }
-    .kin-divider{ background: var(--hair); }
-    .facts{ grid-template-columns: repeat(3, 1fr); }
-    .fact + .fact{ border-top:0; border-left:1px solid var(--hair); }
-    .orn{ width:150px; height:150px; }
+    #families .pair{ flex-direction:row; justify-content:center; gap: 3rem; align-items:flex-start; }
+    .party{ flex:1; }
+    .heart-rule{ align-self:center; margin-top:0; }
+    .kin-group{ text-align:center; }
   }
 
-  /* ---------- desktop ---------- */
+  /* ---------- desktop ----------
+     Mobile is deliberately untouched; everything below only applies from 64rem up,
+     where the narrow column left too much empty ground and the names read too small. */
   @media (min-width: 64rem){
-    :root{ --maxw: 46rem; }
+    .orn{ width:178px; height:178px; }
+    :root{ --maxw: 48rem; }
     body{ font-size: 18px; }
 
-    .hero{ min-height: 82svh; }
-    .hero-names .first{ display:inline; font-size: 3.9rem; }
-    .hero-names .amp{ display:inline; font-size: 2.8rem; margin: 0 .16em; }
-    .hero .blessing{ font-size:1.1rem; max-width: 34rem; }
-    .hero .when{ font-size: 1.4rem; }
-    .hero .where{ font-size: 1.25rem; }
+    .sheet{
+      position: relative;
+      max-width: 66rem;
+      margin: 3.5rem auto 4.5rem;
+      padding: 1rem 3rem 2rem;
+      border: 1px solid rgba(203,174,107,.26);
+      background: linear-gradient(180deg, rgba(203,174,107,.05), rgba(0,0,0,.10));
+    }
+    /* corner ticks, echoing the share card */
+    .sheet::before, .sheet::after{
+      content:""; position:absolute; width:30px; height:30px;
+      border-color: var(--gold); border-style: solid;
+    }
+    .sheet::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
+    .sheet::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
 
-    section{ padding-block: 5rem; }
-    .section-title{ font-size: 2.15rem; }
+    /* names on one line — fills the width instead of stacking like a phone */
+    .hero{ min-height: 74svh; padding: 3rem 0 2rem; }
+    .hero-names{ margin: 1.6rem 0 .6rem; }
+    .hero-names .first{ display:inline; font-size: 4rem; }
+    .hero-names .amp{ display:inline; font-size: 2.9rem; margin: 0 .16em; }
+    .hero .blessing{ font-size: 1.12rem; max-width: 34rem; }
+    .hero .role{ font-size: .9rem; margin-top: 1.3rem; }
+    .hero .when{ font-size: 1.45rem; margin-top: 1.7rem; }
 
-    .cd-cell{ min-width: 6rem; padding: 1.2rem .8rem; }
-    .cd-num{ font-size: 2.6rem; }
+    section{ padding: 4.2rem 0; }
+    .section-title{ font-size: 1.2rem; }
+    .section-title .lead{ font-size: 2.6rem; }
 
-    #families.wrap{ max-width: 58rem; }
-    .pair{ gap: 2.4rem; }
-    .party .name{ font-size: 1.32rem; }
-    .party .parents{ font-size: 1.1rem; }
+    .cd-cell{ min-width: 6rem; padding: 1.3rem .8rem; }
+    .cd-num{ font-size: 2.7rem; }
 
-    .fact{ padding: 1.5rem 1rem; }
-    .fact .v{ font-size: 1.1rem; }
-    .map iframe{ height: 360px; }
+    /* wider than the reading column: the parents line must not wrap mid-name */
+    #families.wrap{ max-width: 62rem; }
+    #families .pair{ gap: 5rem; }
+    .party .name{ font-size: 1.8rem; }
+    .party .work{ font-size: 1rem; }
+    .party .parents{ font-size: 1.15rem; }
 
-    #kin.wrap{ max-width: 54rem; }
+    .detail-card, .kin-card{ padding: 2.2rem 2rem; }
+    .map iframe{ height: 380px; }
+    .detail-v{ font-size: 1.28rem; }
+    .venue-name{ font-size: 1.25rem; }
     .kin-name{ font-size: 1.1rem; }
 
-    .closing{ padding-block: 5.5rem 1.5rem; }
-    .orn{ width:180px; height:180px; }
+    .closing{ padding: 4.5rem 0 1.5rem; }
+    .closing .verse{ font-size: 1.1rem; max-width: 30rem; }
+    .closing .join{ font-size: 2.2rem; }
+    footer{ padding: 2rem 0 1rem; }
+
+    .sprig{ width: 132px; margin: 3rem auto; }
   }
+
 </style>
 
 <noscript>
+  <!-- Without JS the cover can never be dismissed; hide it and show the invitation directly. -->
   <style>
     #cover{ display:none !important; }
     .reveal{ opacity:1 !important; transform:none !important; }
@@ -332,9 +350,7 @@
 </head>
 <body>
 
-<!-- ============ ICON / ORNAMENT SPRITE ============ -->
 <svg class="sprite" aria-hidden="true" focusable="false"><defs>
-
   <symbol id="i-corner" viewBox="0 0 160 160">
     <g fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 64 C 30 62, 54 46, 66 16"/>
@@ -349,65 +365,21 @@
     <circle cx="43" cy="30" r="2.3" fill="currentColor"/>
     <circle cx="90" cy="78" r="1.7" fill="currentColor"/>
   </symbol>
-
-  <symbol id="i-rule" viewBox="0 0 200 26">
-    <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-      <path d="M4 13 H78"/><path d="M196 13 H122"/>
-      <path d="M100 3 C 93 8, 91 16, 100 23 C 109 16, 107 8, 100 3Z"/>
-      <path d="M100 23 C 92 22, 85 17, 83 10 C 91 9, 97 14, 100 21"/>
-      <path d="M100 23 C 108 22, 115 17, 117 10 C 109 9, 103 14, 100 21"/>
-    </g>
-    <circle cx="82" cy="13" r="1.8" fill="currentColor"/>
-    <circle cx="118" cy="13" r="1.8" fill="currentColor"/>
-  </symbol>
-
-  <symbol id="i-cal" viewBox="0 0 24 24">
-    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="5" width="18" height="16" rx="2"/>
-      <path d="M3 10h18M8 3v4M16 3v4"/>
-      <path d="M7.5 14h2M11 14h2M14.5 14h2M7.5 17.5h2M11 17.5h2"/>
-    </g>
-  </symbol>
-
-  <symbol id="i-clock" viewBox="0 0 24 24">
-    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2"/>
-    </g>
-  </symbol>
-
-  <symbol id="i-ring" viewBox="0 0 24 24">
-    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="15" r="6"/>
-      <path d="M9.6 6.2 L12 2.6 L14.4 6.2 L12 9.2 Z"/>
-    </g>
-  </symbol>
-
-  <symbol id="i-pin" viewBox="0 0 24 24">
-    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 21.5s7-6.2 7-11.3A7 7 0 0 0 5 10.2c0 5.1 7 11.3 7 11.3Z"/>
-      <circle cx="12" cy="10" r="2.6"/>
-    </g>
-  </symbol>
-
-  <symbol id="i-lotus" viewBox="0 0 56 36">
-    <g fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M28 4 C 20 12, 18 24, 28 32 C 38 24, 36 12, 28 4Z"/>
-      <path d="M28 32 C 17 31, 7 24, 3 14 C 14 12, 24 19, 28 29"/>
-      <path d="M28 32 C 39 31, 49 24, 53 14 C 42 12, 32 19, 28 29"/>
-    </g>
-  </symbol>
-
-  <symbol id="i-wave" viewBox="0 0 320 20">
-    <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-      <path d="M0 10 Q 20 1, 40 10 T 80 10 T 120 10 T 160 10 T 200 10 T 240 10 T 280 10 T 320 10"/>
-      <path d="M0 16 Q 20 7, 40 16 T 80 16 T 120 16 T 160 16 T 200 16 T 240 16 T 280 16 T 320 16" opacity=".55"/>
-    </g>
-  </symbol>
-
 </defs></svg>
 
-<!-- ============ ENVELOPE COVER (unchanged) ============ -->
+<div class="ornlayer" aria-hidden="true">
+  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
+  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
+  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
+  <svg class="orn orn--br"><use href="#i-corner"/></svg>
+</div>
+
+<!-- ============ ENVELOPE COVER ============ -->
 <div id="cover" role="button" tabindex="0" aria-label="Tap to open the invitation">
+  <svg class="orn orn--tl" aria-hidden="true"><use href="#i-corner"/></svg>
+  <svg class="orn orn--tr" aria-hidden="true"><use href="#i-corner"/></svg>
+  <svg class="orn orn--bl" aria-hidden="true"><use href="#i-corner"/></svg>
+  <svg class="orn orn--br" aria-hidden="true"><use href="#i-corner"/></svg>
   <div class="cover-invoke" lang="sa">&#2384; &#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307;</div>
   <div class="cover-names display">Akhil <span class="amp">&amp;</span> Gopika</div>
   <div class="envelope" aria-hidden="true">
@@ -419,14 +391,11 @@
   <p class="tap"><span>Tap to open <svg class="chev" viewBox="0 0 16 10" fill="none" aria-hidden="true"><path d="M1.5 1.5 L8 8 L14.5 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></p>
 </div>
 
-<!-- ============ BAND 1 · INVITATION REVEAL ============ -->
-<div class="band band--wine">
-  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
-  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--br"><use href="#i-corner"/></svg>
+<div class="sheet">
 
-  <header class="hero wrap reveal">
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap reveal">
     <div class="invocation" lang="sa">&#2384; &#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307;</div>
     <p class="blessing">With the blessings of the Almighty and our elders, our families joyfully invite you to celebrate the engagement of</p>
     <h1 class="hero-names display">
@@ -434,162 +403,165 @@
       <span class="amp">&amp;</span>
       <span class="first">Gopika</span>
     </h1>
-    <svg class="rule rule--sm"><use href="#i-rule"/></svg>
     <p class="role">Engagement</p>
-    <p class="when">Sunday, <b>20 December 2026</b></p>
-    <p class="where">Kanjirappally</p>
-  </header>
-</div>
-
-<!-- ============ BAND 2 · COUNTDOWN + FAMILIES ============ -->
-<div class="band band--cream">
-  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
-  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--br"><use href="#i-corner"/></svg>
-
-  <section id="countdown" class="wrap reveal">
-    <h2 class="section-title">Counting down to our special day</h2>
-    <svg class="rule rule--sm"><use href="#i-rule"/></svg>
-    <div class="cd-grid" id="cd" aria-live="polite">
-      <div class="cd-cell"><div class="cd-num" id="cd-d">--</div><span class="cd-lab">Days</span></div>
-      <div class="cd-cell"><div class="cd-num" id="cd-h">--</div><span class="cd-lab">Hours</span></div>
-      <div class="cd-cell"><div class="cd-num" id="cd-m">--</div><span class="cd-lab">Minutes</span></div>
-      <div class="cd-cell"><div class="cd-num" id="cd-s">--</div><span class="cd-lab">Seconds</span></div>
-    </div>
-    <p class="cd-note">Until the celebration begins at 12:00 noon (IST).</p>
-  </section>
-
-  <section id="families" class="wrap reveal">
-    <h2 class="section-title">Two families, one beautiful beginning</h2>
-    <svg class="rule rule--sm"><use href="#i-rule"/></svg>
-    <div class="pair">
-      <div class="party">
-        <div class="name">Akhil M Anil</div>
-        <div class="work">Senior Software Engineer, Malta</div>
-        <div class="sub">Son of</div>
-        <div class="parents">Mr. Anilkumar M R &amp; Mrs. Dolly Anilkumar</div>
-        <p class="place">Malampurathu (H), Manjapallykunnu,<br/>Ponkunnam P.O, Kottayam</p>
-      </div>
-
-      <div class="vrule" aria-hidden="true"><i class="bar"></i><i class="dia"></i><i class="bar"></i></div>
-
-      <div class="party">
-        <div class="name">Gopika C Shaji</div>
-        <div class="work">Software Engineer, Kochi, Kerala</div>
-        <div class="sub">Daughter of</div>
-        <div class="parents">Mr. Shaji P Gopi &amp; Mrs. Sujatha Shaji</div>
-        <p class="place">Chappanattil (H), Thirumoolapuram P.O,<br/>Thiruvalla</p>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- ============ BAND 3 · WHEN & WHERE ============ -->
-<div class="band band--wine">
-  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
-  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--br"><use href="#i-corner"/></svg>
-
-  <section id="details" class="wrap reveal">
-    <h2 class="section-title">When &amp; Where</h2>
-    <svg class="rule rule--sm"><use href="#i-rule"/></svg>
-
-    <div class="facts">
-      <div class="fact">
-        <svg><use href="#i-cal"/></svg>
-        <div class="k">Date</div>
-        <div class="v">Sunday,<br/><b>20 December 2026</b></div>
-      </div>
-      <div class="fact">
-        <svg><use href="#i-clock"/></svg>
-        <div class="k">Celebration</div>
-        <div class="v">12:00 noon &ndash; 2:00 pm</div>
-      </div>
-      <div class="fact">
-        <svg><use href="#i-ring"/></svg>
-        <div class="k">Ring Exchange</div>
-        <div class="v">12:20 pm &ndash; 12:45 pm</div>
-      </div>
-    </div>
-
-    <div class="venue">
-      <svg><use href="#i-pin"/></svg>
-      <div>
-        <div class="venue-name">The Kanjirappally Club</div>
-        <div class="venue-addr">Near AKJM School, Kanjirappally</div>
-      </div>
-    </div>
-
-    <div class="map">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15737.668275610838!2d76.76010684063415!3d9.559268948394788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0637000c67b5d5%3A0x5cd505ed9be09164!2sThe%20Kanjirappally%20Club!5e0!3m2!1sen!2s!4v1790097447327!5m2!1sen!2s"
-        title="Map showing The Kanjirappally Club, Kanjirappally"
-        loading="lazy"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen></iframe>
-    </div>
-
-    <div class="actions">
-      <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=The%20Kanjirappally%20Club%2C%20Kanjirappally%2C%20Kerala" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Get Directions</a>
-      <a class="btn" id="cal" href="#" target="_blank" rel="noopener"><svg><use href="#i-cal"/></svg>Add to Calendar</a>
-    </div>
-  </section>
-</div>
-
-<!-- ============ BAND 4 · WITH LOVE, FROM OUR FAMILIES ============ -->
-<div class="band band--cream">
-  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
-  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--br"><use href="#i-corner"/></svg>
-
-  <section id="kin" class="wrap reveal">
-    <h2 class="section-title">With love, from our families</h2>
-    <svg class="rule rule--sm"><use href="#i-rule"/></svg>
-    <div class="kin-grid">
-      <div>
-        <div class="kin-side">Groom&#8217;s Side</div>
-        <div class="kin-row">
-          <span class="kin-name">Arya Anilkumar</span>
-          <span class="kin-role">Sister</span>
-        </div>
-      </div>
-      <div class="kin-divider" aria-hidden="true"></div>
-      <div>
-        <div class="kin-side">Bride&#8217;s Side</div>
-        <div class="kin-row">
-          <span class="kin-name">Gokul C Shaji &amp; Krishna Kavya</span>
-          <span class="kin-role">Brother &amp; Sister-in-law</span>
-        </div>
-        <div class="kin-row">
-          <span class="kin-name">Sidhrath K G</span>
-          <span class="kin-role">Nephew</span>
-        </div>
-      </div>
-    </div>
-    <p class="kin-note">&hellip;who look forward to celebrating this special day with you.</p>
-  </section>
-</div>
-
-<!-- ============ BAND 5 · CLOSING ============ -->
-<div class="band band--wine">
-  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
-  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
-  <svg class="orn orn--br"><use href="#i-corner"/></svg>
-
-  <div class="closing wrap reveal">
-    <p class="verse">As we begin this new chapter together, your presence and blessings would mean the world to us.</p>
-    <svg class="rule rule--sm"><use href="#i-rule"/></svg>
-    <p class="join">With love, we invite you to celebrate with us.</p>
-    <div class="monogram">A <span class="amp">&amp;</span> G</div>
-    <div class="stamp">20 &middot; 12 &middot; 2026 &nbsp;&bull;&nbsp; Kanjirappally</div>
-    <svg class="lotus-end"><use href="#i-lotus"/></svg>
-    <svg class="wave"><use href="#i-wave"/></svg>
+    <p class="when">Sunday, <b>20 December 2026</b><br />Kanjirappally</p>
   </div>
+</header>
+
+<svg class="sprig" viewBox="0 0 200 40" fill="none" aria-hidden="true">
+  <path d="M10 20 H90" stroke="currentColor" stroke-width="1"/>
+  <path d="M190 20 H110" stroke="currentColor" stroke-width="1"/>
+  <g stroke="currentColor" stroke-width="1" fill="none">
+    <path d="M100 6 C94 12 94 28 100 34 C106 28 106 12 100 6Z"/>
+    <path d="M100 10 V30"/>
+  </g>
+  <circle cx="90" cy="20" r="2" fill="currentColor"/>
+  <circle cx="110" cy="20" r="2" fill="currentColor"/>
+</svg>
+
+<!-- ============ COUNTDOWN ============ -->
+<section id="countdown" class="wrap reveal">
+  <h2 class="section-title"><span class="lead">Counting down</span> to our special day</h2>
+  <div class="cd-grid" id="cd" aria-live="polite">
+    <div class="cd-cell"><div class="cd-num" id="cd-d">--</div><span class="cd-lab">Days</span></div>
+    <div class="cd-cell"><div class="cd-num" id="cd-h">--</div><span class="cd-lab">Hours</span></div>
+    <div class="cd-cell"><div class="cd-num" id="cd-m">--</div><span class="cd-lab">Minutes</span></div>
+    <div class="cd-cell"><div class="cd-num" id="cd-s">--</div><span class="cd-lab">Seconds</span></div>
+  </div>
+  <p class="cd-note">Until the celebration begins at 12:00 noon (IST).</p>
+</section>
+
+<svg class="sprig" viewBox="0 0 200 40" fill="none" aria-hidden="true">
+  <path d="M10 20 H90" stroke="currentColor" stroke-width="1"/>
+  <path d="M190 20 H110" stroke="currentColor" stroke-width="1"/>
+  <g stroke="currentColor" stroke-width="1" fill="none">
+    <path d="M100 6 C94 12 94 28 100 34 C106 28 106 12 100 6Z"/>
+    <path d="M100 10 V30"/>
+  </g>
+  <circle cx="90" cy="20" r="2" fill="currentColor"/>
+  <circle cx="110" cy="20" r="2" fill="currentColor"/>
+</svg>
+
+<!-- ============ FAMILIES ============ -->
+<section id="families" class="wrap reveal">
+  <h2 class="section-title"><span class="lead">Two families,</span> one beautiful beginning</h2>
+  <div class="pair">
+    <div class="party">
+      <div class="name display">Akhil M Anil</div>
+      <div class="work">Senior Software Engineer, Malta</div>
+      <div class="sub">Son of</div>
+      <div class="parents"><span>Mr. Anilkumar M R &amp; Mrs. Dolly Anilkumar</span></div>
+      <p class="place">Malampurathu (H), Manjapallykunnu,<br/>Ponkunnam P.O, Kottayam</p>
+    </div>
+
+    <div class="heart-rule" aria-hidden="true">&#10084;</div>
+
+    <div class="party">
+      <div class="name display">Gopika C Shaji</div>
+      <div class="work">Software Engineer, Kochi, Kerala</div>
+      <div class="sub">Daughter of</div>
+      <div class="parents"><span>Mr. Shaji P Gopi &amp; Mrs. Sujatha Shaji</span></div>
+      <p class="place">Chappanattil (H), Thirumoolapuram P.O,<br/>Thiruvalla</p>
+    </div>
+  </div>
+</section>
+
+<svg class="sprig" viewBox="0 0 200 40" fill="none" aria-hidden="true">
+  <path d="M10 20 H90" stroke="currentColor" stroke-width="1"/>
+  <path d="M190 20 H110" stroke="currentColor" stroke-width="1"/>
+  <g stroke="currentColor" stroke-width="1" fill="none">
+    <path d="M100 6 C94 12 94 28 100 34 C106 28 106 12 100 6Z"/>
+    <path d="M100 10 V30"/>
+  </g>
+  <circle cx="90" cy="20" r="2" fill="currentColor"/>
+  <circle cx="110" cy="20" r="2" fill="currentColor"/>
+</svg>
+
+<!-- ============ DETAILS ============ -->
+<section id="details" class="wrap reveal">
+  <h2 class="section-title"><span class="lead">When &amp; where</span></h2>
+  <div class="detail-card">
+    <div class="detail-row">
+      <div class="detail-k">Date</div>
+      <div class="detail-v"><b>Sunday, 20 December 2026</b></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-k">Celebration</div>
+      <div class="detail-v">12:00 noon &ndash; 2:00 pm</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-k">Ring Exchange</div>
+      <div class="detail-v ring">12:20 pm &ndash; 12:45 pm</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-k">Venue</div>
+      <div class="detail-v venue-name">The Kanjirappally Club</div>
+      <div class="venue-addr">Near AKJM School, Kanjirappally</div>
+    </div>
+  </div>
+  <div class="map">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15737.668275610838!2d76.76010684063415!3d9.559268948394788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0637000c67b5d5%3A0x5cd505ed9be09164!2sThe%20Kanjirappally%20Club!5e0!3m2!1sen!2s!4v1790097447327!5m2!1sen!2s"
+      title="Map showing The Kanjirappally Club, Kanjirappally"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
+  </div>
+  <div class="actions">
+    <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=The%20Kanjirappally%20Club%2C%20Kanjirappally%2C%20Kerala" target="_blank" rel="noopener">Get Directions</a>
+    <a class="btn solid" id="cal" href="#" target="_blank" rel="noopener">Add to Calendar</a>
+  </div>
+</section>
+
+<svg class="sprig" viewBox="0 0 200 40" fill="none" aria-hidden="true">
+  <path d="M10 20 H90" stroke="currentColor" stroke-width="1"/>
+  <path d="M190 20 H110" stroke="currentColor" stroke-width="1"/>
+  <g stroke="currentColor" stroke-width="1" fill="none">
+    <path d="M100 6 C94 12 94 28 100 34 C106 28 106 12 100 6Z"/>
+    <path d="M100 10 V30"/>
+  </g>
+  <circle cx="90" cy="20" r="2" fill="currentColor"/>
+  <circle cx="110" cy="20" r="2" fill="currentColor"/>
+</svg>
+
+<!-- ============ WITH LOVE, FROM ============ -->
+<section id="kin" class="wrap reveal">
+  <h2 class="section-title"><span class="lead">With love,</span> from our families</h2>
+  <div class="kin-card">
+    <div class="kin-group">
+      <div class="kin-side">Groom&#8217;s side</div>
+      <div class="kin-row">
+        <span class="kin-name">Arya Anilkumar</span>
+        <span class="kin-role">Sister</span>
+      </div>
+    </div>
+    <div class="kin-group">
+      <div class="kin-side">Bride&#8217;s side</div>
+      <div class="kin-row">
+        <span class="kin-name">Gokul C Shaji &amp; Krishna Kavya</span>
+        <span class="kin-role">Brother &amp; Sister-in-law</span>
+      </div>
+      <div class="kin-row">
+        <span class="kin-name">Sidhrath K G</span>
+        <span class="kin-role">Nephew</span>
+      </div>
+    </div>
+  </div>
+  <p class="kin-note">&hellip;who look forward to celebrating this special day with you.</p>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<div class="closing wrap reveal">
+  <p class="verse">As we begin this new chapter together, your presence and blessings would mean the world to us.</p>
+  <p class="join">With love, we invite you to celebrate with us.</p>
 </div>
+
+<footer>
+  <div class="mono">A &amp; G</div>
+  <div class="small">20 &middot; 12 &middot; 2026 &nbsp;&bull;&nbsp; Kanjirappally</div>
+</footer>
+
+</div><!-- /.sheet -->
 
 <script>
 (function(){
