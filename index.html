@@ -69,6 +69,21 @@
 
   .wrap{ position: relative; z-index:1; width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 1.4rem; }
 
+  /* ---------- lotus corners ----------
+     Purely decorative, painted behind everything (.wrap sits at z-index 1)
+     and fixed to the viewport, so no box on the page changes size. */
+  .sprite{ position:absolute; width:0; height:0; overflow:hidden; }
+  .ornlayer{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .orn{
+    position:absolute; width:116px; height:116px;
+    color: var(--gold); opacity:.2; pointer-events:none;
+  }
+  .orn--tl{ top:0; left:0; }
+  .orn--tr{ top:0; right:0; transform: scaleX(-1); }
+  .orn--bl{ bottom:0; left:0; transform: scaleY(-1); }
+  .orn--br{ bottom:0; right:0; transform: scale(-1,-1); }
+  #cover .orn{ opacity:.24; }
+
   /* Marcellus sets the "engraved" voice: caps, letterspaced, never bold. */
   .display{
     font-family: var(--display);
@@ -254,6 +269,7 @@
   }
 
   @media (min-width: 40rem){
+    .orn{ width:148px; height:148px; }
     :root{ --maxw: 40rem; }
     #families .pair{ flex-direction:row; justify-content:center; gap: 3rem; align-items:flex-start; }
     .party{ flex:1; }
@@ -265,6 +281,7 @@
      Mobile is deliberately untouched; everything below only applies from 64rem up,
      where the narrow column left too much empty ground and the names read too small. */
   @media (min-width: 64rem){
+    .orn{ width:178px; height:178px; }
     :root{ --maxw: 48rem; }
     body{ font-size: 18px; }
 
@@ -333,8 +350,36 @@
 </head>
 <body>
 
+<svg class="sprite" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-corner" viewBox="0 0 160 160">
+    <g fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 64 C 30 62, 54 46, 66 16"/>
+      <path d="M8 98 C 48 92, 82 62, 96 18"/>
+      <path d="M38 46 C 29 35, 31 20, 44 11 C 55 20, 57 35, 48 47"/>
+      <path d="M38 46 C 25 43, 14 33, 13 20 C 27 20, 38 29, 42 41"/>
+      <path d="M48 47 C 61 44, 72 34, 73 21 C 59 21, 48 30, 44 42"/>
+      <path d="M74 80 C 83 71, 98 69, 107 76 C 98 87, 83 89, 74 80Z"/>
+      <path d="M26 112 C 35 103, 50 101, 59 108 C 50 119, 35 121, 26 112Z"/>
+      <path d="M104 26 C 112 20, 122 21, 127 28 C 119 34, 109 33, 104 26Z"/>
+    </g>
+    <circle cx="43" cy="30" r="2.3" fill="currentColor"/>
+    <circle cx="90" cy="78" r="1.7" fill="currentColor"/>
+  </symbol>
+</defs></svg>
+
+<div class="ornlayer" aria-hidden="true">
+  <svg class="orn orn--tl"><use href="#i-corner"/></svg>
+  <svg class="orn orn--tr"><use href="#i-corner"/></svg>
+  <svg class="orn orn--bl"><use href="#i-corner"/></svg>
+  <svg class="orn orn--br"><use href="#i-corner"/></svg>
+</div>
+
 <!-- ============ ENVELOPE COVER ============ -->
 <div id="cover" role="button" tabindex="0" aria-label="Tap to open the invitation">
+  <svg class="orn orn--tl" aria-hidden="true"><use href="#i-corner"/></svg>
+  <svg class="orn orn--tr" aria-hidden="true"><use href="#i-corner"/></svg>
+  <svg class="orn orn--bl" aria-hidden="true"><use href="#i-corner"/></svg>
+  <svg class="orn orn--br" aria-hidden="true"><use href="#i-corner"/></svg>
   <div class="cover-invoke" lang="sa">&#2384; &#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307;</div>
   <div class="cover-names display">Akhil <span class="amp">&amp;</span> Gopika</div>
   <div class="envelope" aria-hidden="true">
