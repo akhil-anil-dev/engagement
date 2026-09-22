@@ -254,6 +254,66 @@
     .heart-rule{ align-self:center; margin-top:0; }
     .kin-group{ text-align:center; }
   }
+
+  /* ---------- desktop ----------
+     Mobile is deliberately untouched; everything below only applies from 64rem up,
+     where the narrow column left too much empty ground and the names read too small. */
+  @media (min-width: 64rem){
+    :root{ --maxw: 48rem; }
+    body{ font-size: 18px; }
+
+    .sheet{
+      position: relative;
+      max-width: 66rem;
+      margin: 3.5rem auto 4.5rem;
+      padding: 1rem 3rem 2rem;
+      border: 1px solid rgba(203,174,107,.26);
+      background: linear-gradient(180deg, rgba(203,174,107,.05), rgba(0,0,0,.10));
+    }
+    /* corner ticks, echoing the share card */
+    .sheet::before, .sheet::after{
+      content:""; position:absolute; width:30px; height:30px;
+      border-color: var(--gold); border-style: solid;
+    }
+    .sheet::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
+    .sheet::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+
+    /* names on one line — fills the width instead of stacking like a phone */
+    .hero{ min-height: 74svh; padding: 3rem 0 2rem; }
+    .hero-names{ margin: 1.6rem 0 .6rem; }
+    .hero-names .first{ display:inline; font-size: 4rem; }
+    .hero-names .amp{ display:inline; font-size: 2.9rem; margin: 0 .16em; }
+    .hero .blessing{ font-size: 1.12rem; max-width: 34rem; }
+    .hero .role{ font-size: .9rem; margin-top: 1.3rem; }
+    .hero .when{ font-size: 1.45rem; margin-top: 1.7rem; }
+
+    section{ padding: 4.2rem 0; }
+    .section-title{ font-size: 1.2rem; }
+    .section-title .lead{ font-size: 2.6rem; }
+
+    .cd-cell{ min-width: 6rem; padding: 1.3rem .8rem; }
+    .cd-num{ font-size: 2.7rem; }
+
+    /* wider than the reading column: the parents line must not wrap mid-name */
+    #families.wrap{ max-width: 62rem; }
+    #families .pair{ gap: 5rem; }
+    .party .name{ font-size: 1.8rem; }
+    .party .work{ font-size: 1rem; }
+    .party .parents{ font-size: 1.15rem; }
+
+    .detail-card, .kin-card{ padding: 2.2rem 2rem; }
+    .detail-v{ font-size: 1.28rem; }
+    .venue-name{ font-size: 1.25rem; }
+    .kin-name{ font-size: 1.1rem; }
+
+    .closing{ padding: 4.5rem 0 1.5rem; }
+    .closing .verse{ font-size: 1.1rem; max-width: 30rem; }
+    .closing .join{ font-size: 2.2rem; }
+    footer{ padding: 2rem 0 1rem; }
+
+    .sprig{ width: 132px; margin: 3rem auto; }
+  }
+
 </style>
 
 <noscript>
@@ -278,6 +338,8 @@
   </div>
   <p class="tap"><span>Tap to open &#709;</span></p>
 </div>
+
+<div class="sheet">
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -439,6 +501,8 @@
   <div class="mono">A &amp; G</div>
   <div class="small">20 &middot; 12 &middot; 2026 &nbsp;&bull;&nbsp; Kanjirappally</div>
 </footer>
+
+</div><!-- /.sheet -->
 
 <script>
 (function(){
