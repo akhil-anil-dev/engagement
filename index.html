@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Akhil &amp; Gopika · Engagement · 20 December 2026</title>
-<meta name="description" content="With the blessings of the Almighty and our elders, Akhil M Anil and Gopika C Shaji invite you to their engagement — Sunday, 20 December 2026, Kanjirappally Club Auditorium." />
+<meta name="description" content="With the blessings of the Almighty and our elders, Akhil M Anil and Gopika C Shaji invite you to their engagement — Sunday, 20 December 2026, The Kanjirappally Club." />
 
 <meta property="og:title" content="Akhil &amp; Gopika — Engagement" />
-<meta property="og:description" content="Sunday, 20 December 2026 · Kanjirappally Club Auditorium. With joy, we invite you." />
+<meta property="og:description" content="Sunday, 20 December 2026 · The Kanjirappally Club. With joy, we invite you." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="preview.png" />
 <meta property="og:image:type" content="image/png" />
@@ -204,6 +204,12 @@
   .venue-name{ font-family: var(--display); text-transform:uppercase; letter-spacing:.1em; font-size: 1.1rem; color: var(--gold-soft); margin-top:.35rem; }
   .venue-addr{ color: var(--ink-soft); font-style:italic; font-size:.95rem; }
 
+  .map{
+    margin-top: 1.4rem; border:1px solid var(--line); border-radius:6px;
+    overflow:hidden; line-height:0;
+  }
+  .map iframe{ display:block; width:100%; height:290px; border:0; filter: saturate(.9); }
+
   .actions{ display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top: 1.8rem; }
   .btn{
     display:inline-flex; align-items:center; gap:.5rem;
@@ -302,6 +308,7 @@
     .party .parents{ font-size: 1.15rem; }
 
     .detail-card, .kin-card{ padding: 2.2rem 2rem; }
+    .map iframe{ height: 380px; }
     .detail-v{ font-size: 1.28rem; }
     .venue-name{ font-size: 1.25rem; }
     .kin-name{ font-size: 1.1rem; }
@@ -444,12 +451,20 @@
     </div>
     <div class="detail-row">
       <div class="detail-k">Venue</div>
-      <div class="detail-v venue-name">Kanjirappally Club Auditorium</div>
+      <div class="detail-v venue-name">The Kanjirappally Club</div>
       <div class="venue-addr">Near AKJM School, Kanjirappally</div>
     </div>
   </div>
+  <div class="map">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15737.668275610838!2d76.76010684063415!3d9.559268948394788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0637000c67b5d5%3A0x5cd505ed9be09164!2sThe%20Kanjirappally%20Club!5e0!3m2!1sen!2s!4v1790097447327!5m2!1sen!2s"
+      title="Map showing The Kanjirappally Club, Kanjirappally"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
+  </div>
   <div class="actions">
-    <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Kanjirappally%20Club%20Auditorium%2C%20Near%20AKJM%20School%2C%20Kanjirappally" target="_blank" rel="noopener">Open in Maps</a>
+    <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=The%20Kanjirappally%20Club%2C%20Kanjirappally%2C%20Kerala" target="_blank" rel="noopener">Get Directions</a>
     <a class="btn solid" id="cal" href="#" target="_blank" rel="noopener">Add to Calendar</a>
   </div>
 </section>
@@ -552,7 +567,7 @@
     var start = "20261220T063000Z";
     var end   = "20261220T083000Z";
     var text  = encodeURIComponent("Akhil & Gopika — Engagement");
-    var loc   = encodeURIComponent("Kanjirappally Club Auditorium, Near AKJM School, Kanjirappally");
+    var loc   = encodeURIComponent("The Kanjirappally Club, Kanjirappally, Kerala");
     var det   = encodeURIComponent("Ring exchange 12:20–12:45 pm. With joy, we invite you.");
     cal.href = "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+text+
                "&dates="+start+"/"+end+"&location="+loc+"&details="+det;
