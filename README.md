@@ -9,27 +9,40 @@ Sunday, 20 December 2026, Kanjirappally Club Auditorium.
 | --- | --- |
 | `index.html` | The whole invitation — self-contained, no build step, no dependencies |
 | `preview.png` | 1200×630 share card used by `og:image` for WhatsApp / iMessage link previews |
+| `vercel.json` | Static hosting config — no build, plus cache headers |
 
 Fonts (Marcellus + Lora) load from Google Fonts at runtime; everything else is inline.
 
-## Hosting
+## Deploying to Vercel
 
-No build required. Upload both files to any static host, keeping them in the same directory:
+There is no build step. Import the repo at <https://vercel.com/new> and deploy —
+`vercel.json` already sets the framework to none and serves from the repo root, so
+every setting can be left at its default.
 
-- **Netlify Drop** — drag the folder onto <https://app.netlify.com/drop>
-- **Cloudflare Pages / Vercel** — point at this repo, no build command, output directory `.`
-- **GitHub Pages** — Settings → Pages → deploy from this branch, root folder
+Or from the CLI:
 
-### After you know the final URL
+```bash
+npx vercel --prod
+```
 
-`og:image` is currently a relative path, which browsers resolve correctly but some link
-crawlers do not. Once the domain is fixed, make it absolute so previews are reliable:
+Cache headers are set so `index.html` always revalidates — edits to the invitation show
+up immediately for guests who have opened the link before — while `preview.png` is
+cached for a day.
+
+### After the first deploy: make `og:image` absolute
+
+`og:image` is currently the relative path `preview.png`. Browsers resolve it correctly,
+but some link crawlers require an absolute URL, and that is what drives the WhatsApp and
+iMessage preview card. Once the production domain exists, update both tags in
+`index.html`:
 
 ```html
 <meta property="og:image" content="https://your-domain.example/preview.png" />
+<meta property="og:url"   content="https://your-domain.example/" />
 ```
 
-The same applies to adding an `og:url` tag, which some crawlers use for canonicalisation.
+Then re-share the link. WhatsApp caches previews aggressively, so an already-sent link
+may keep showing the old (or empty) card.
 
 ## Notes
 
